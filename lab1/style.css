@@ -1,1 +1,113 @@
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+
+header {
+    background-color: #036608;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+
+#wyszukiwanie {
+    text-align: left;
+    margin: 20px 0;
+}
+
+#wyszukiwania, #cenaMin, #cenaMax, #stronyMin, #stronyMax, #slowoOpis, #okladkaFiltr {
+    
+    padding: 5px;
+    margin: 5px;
+    width: 200px;
+}
+
+#wyszukajPrzycisk {
+    padding: 8px 15px;
+    background-color: #036608;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+
+
+#ksiazki li {
+    background-color: #f4f4f4;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    list-style: none;
+}
+
+#ksiazki h2 {
+    color: #333;
+}
+
+#dodajKsiazke {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+#dodajKsiazke h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#dodajKsiazke form {
+    display: flex;
+    flex-direction: column;
+}
+
+#dodajKsiazke label {
+   
+    margin-top: 10px;
+}
+
+#dodajKsiazke input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#dodajKsiazke button {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+
+a button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #036608;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
