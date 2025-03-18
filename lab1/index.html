@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Sklep z Książkami</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#" id="logowanie">Zaloguj/Wyloguj</a></li>
+                <li><a href="#" id="koszyk">Koszyk</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <section id="wyszukiwanie">
+        <input type="text" id="wyszukiwania" placeholder="Tytul">
+        
+        <div id="filtry">
+            <select id="okladkaFiltr">
+                <option value="">Wszystkie rodzaje okładek</option>
+                <option value="Twarda">Twarda</option>
+                <option value="Miekka">MIękka</option>
+            </select>
+            <input type="number" id="cenaMin" placeholder="cena minimalna">
+            <input type="number" id="cenaMax" placeholder="cena maksymalna"><br>
+            <input type="number" id="stronyMin" placeholder="minimalna liczba stron">
+            <input type="number" id="stronyMax" placeholder="maksymalna liczba stron">
+            <input type="text" id="slowoOpis" placeholder="słowo w opisie">
+            <button id="wyszukajPrzycisk">Szukaj</button>
+        </div>
+    </section>
+
+   
+    <section id="ksiazkiLista">
+        <ul id="ksiazki">
+            
+            <li>
+                <h2>Tytuł Książki</h2>
+                <p>Autor: Nazwa Autora</p>
+                <p>Kategoria: Nazwa Kategorii</p>
+            </li>
+            
+        </ul>
+    </section>
+
+    <a href="index2.html">
+        <button>Dodaj książkę</button>
+    </a>
+    
+
+</body>
+</html>
 
