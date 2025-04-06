@@ -136,10 +136,9 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-createList("Domyślna");
+createList("Główna");
 createList("Mało pilne");
 createList("Pilne");
 createList("Na wczoraj");
-listSelector.value = "Domyślna";
+listSelector.value = "Główna";
 renderLists();
-
