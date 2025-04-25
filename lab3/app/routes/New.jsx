@@ -36,12 +36,6 @@ export default function NewBook() {
     setBookList((prev) => [...prev, newBook]);
 
     
-    setTitle("");
-    setAuthor("");
-    setPages("");
-    setPrice("");
-    setCover("twarda");
-    setDescription("");
   };
 
   return (
