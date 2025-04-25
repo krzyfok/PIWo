@@ -41,7 +41,7 @@ export default function Home() {
       const maxPriceValid = maxPrice ? book.price <= maxPrice : true;
       return minPriceValid && maxPriceValid;
     })
-    .sort((a, b) => a.read - b.read);
+    
 
   return (
     <main className="list-vertical p-4">
