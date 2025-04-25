@@ -30,7 +30,7 @@ export default function NewBook() {
       price: parseFloat(price),
       cover,
       description,
-      read: false,
+      
     };
 
     setBookList((prev) => [...prev, newBook]);
