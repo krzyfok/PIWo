@@ -28,7 +28,7 @@ export const links = () => [
 export function meta() {
   return [
     { title: "Book Shop" },
-    { name: "description", content: "Website for Book Shoop" },
+    { name: "description", content: "Strona internetowa ksiegarni" },
   ];
 }
 
