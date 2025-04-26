@@ -4,7 +4,7 @@ import Book from "../Components/Book";
 
 export function meta() {
   return [
-    { title: "Book Search App" },
+    { title: "Strona internetowa Księgarni" },
     { name: "description", content: "Wyszukiwarka książek z filtrami" },
   ];
 }
