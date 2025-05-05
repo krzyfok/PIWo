@@ -1,5 +1,7 @@
-import { useContext, useState } from "react";
-import { BooksContext } from "../Contexts/BooksContext";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db, auth } from "../firebase-config"; 
+import { onAuthStateChanged } from "firebase/auth";
 import Book from "../Components/Book";
 
 export function meta() {
@@ -11,8 +13,10 @@ export function meta() {
 
 export default function Home() {
   const categories = ["twarda", "miękka"];
-  const { bookList } = useContext(BooksContext);
+  const [books, setBooks] = useState([]);
+  const [user, setUser] = useState(null); 
 
+  
   const [query, setQuery] = useState("");
   const [searchInDescription, setSearchInDescription] = useState("");
   const [selectedCover, setSelectedCover] = useState("");
@@ -20,10 +24,32 @@ export default function Home() {
   const [maxPages, setMaxPages] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [showMyBooks, setShowMyBooks] = useState(false); 
 
- 
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const booksCol = collection(db, "books");
+      const booksSnapshot = await getDocs(booksCol);
+      const booksData = booksSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setBooks(booksData);
+    };
 
-  const filteredBooks = bookList
+  
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    
+    fetchBooks();
+
+    return () => unsubscribe();
+  }, []);
+
+  
+  const filteredBooks = books
     .filter((book) => book.title.toLowerCase().includes(query.toLowerCase()))
     .filter((book) =>
       searchInDescription
@@ -32,16 +58,16 @@ export default function Home() {
     )
     .filter((book) => (selectedCover ? book.cover === selectedCover : true))
     .filter((book) => {
-      const minPagesValid = minPages ? book.pages >= minPages : true;
-      const maxPagesValid = maxPages ? book.pages <= maxPages : true;
+      const minPagesValid = minPages ? book.pages >= parseInt(minPages) : true;
+      const maxPagesValid = maxPages ? book.pages <= parseInt(maxPages) : true;
       return minPagesValid && maxPagesValid;
     })
     .filter((book) => {
-      const minPriceValid = minPrice ? book.price >= minPrice : true;
-      const maxPriceValid = maxPrice ? book.price <= maxPrice : true;
+      const minPriceValid = minPrice ? book.price >= parseFloat(minPrice) : true;
+      const maxPriceValid = maxPrice ? book.price <= parseFloat(maxPrice) : true;
       return minPriceValid && maxPriceValid;
     })
-    
+    .filter((book) => (showMyBooks ? book.userId === user?.uid : true)); 
 
   return (
     <main className="list-vertical p-4">
@@ -72,7 +98,7 @@ export default function Home() {
       </select>
 
       <div className="filters-grid">
-        <div className="filters-grid">
+        <div>
           <label className="text-white" htmlFor="minPages">Min. liczba stron:</label>
           <input
             type="number"
@@ -83,7 +109,7 @@ export default function Home() {
             className="ml-2 p-1 rounded"
           />
         </div>
-        <div className="filters-grid">
+        <div>
           <label className="text-white" htmlFor="maxPages">Max. liczba stron:</label>
           <input
             type="number"
@@ -94,7 +120,7 @@ export default function Home() {
             className="ml-2 p-1 rounded"
           />
         </div>
-        <div className="filters-grid">
+        <div>
           <label className="text-white" htmlFor="minPrice">Min. cena:</label>
           <input
             type="number"
@@ -105,7 +131,7 @@ export default function Home() {
             className="ml-2 p-1 rounded"
           />
         </div>
-        <div className="filters-grid">
+        <div>
           <label className="text-white" htmlFor="maxPrice">Max. cena:</label>
           <input
             type="number"
@@ -118,6 +144,16 @@ export default function Home() {
         </div>
       </div>
 
+    
+      {user && (
+        <button
+          onClick={() => setShowMyBooks(!showMyBooks)}
+          className="mb-4 p-2 bg-blue-500 text-white rounded"
+        >
+          {showMyBooks ? "Pokaż wszystkie książki" : "Pokaż moje książki"}
+        </button>
+      )}
+
       {filteredBooks.length > 0 ? (
         filteredBooks.map((book) => (
           <div
@@ -126,14 +162,10 @@ export default function Home() {
           >
             <Book book={book} />
             <div className="list-horizontal gap-2 mt-2">
-              <button
-                className="px-2 py-1 bg-blue-500 text-white rounded"
-              >
+              <button className="px-2 py-1 bg-blue-500 text-white rounded">
                 Edytuj
               </button>
-              <button
-                className="px-2 py-1 bg-red-500 text-white rounded"
-              >
+              <button className="px-2 py-1 bg-red-500 text-white rounded">
                 Usuń
               </button>
             </div>
