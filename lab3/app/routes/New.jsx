@@ -1,5 +1,7 @@
-import { useContext, useState } from "react";
-import { BooksContext } from "../Contexts/BooksContext";
+import { useState, useEffect } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db, auth } from "../firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
 
 export function meta() {
   return [
@@ -9,37 +11,59 @@ export function meta() {
 }
 
 export default function NewBook() {
-  const { bookList, setBookList } = useContext(BooksContext);
-
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [pages, setPages] = useState("");
   const [price, setPrice] = useState("");
   const [cover, setCover] = useState("twarda");
   const [description, setDescription] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [user, setUser] = useState(null);
 
-  const handleAddBook = (e) => {
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleAddBook = async (e) => {
     e.preventDefault();
     if (!title || !author || !pages || !price || !cover) return;
+    if (!user) {
+      alert("Musisz być zalogowany, aby dodać książkę.");
+      return;
+    }
 
     const newBook = {
-      id: bookList.length + 1,
       title,
       author,
       pages: parseInt(pages),
       price: parseFloat(price),
       cover,
       description,
-      
+      userId: user.uid, 
     };
 
-    setBookList((prev) => [...prev, newBook]);
-
-    
+    try {
+      await addDoc(collection(db, "books"), newBook);
+      setSuccessMessage("Książka została dodana!");
+      
+      setTitle("");
+      setAuthor("");
+      setPages("");
+      setPrice("");
+      setCover("twarda");
+      setDescription("");
+    } catch (error) {
+      console.error("Błąd podczas dodawania książki:", error);
+    }
   };
 
   return (
-    <main className="list-vertical">
+    <main className="list-vertical p-4">
       <form className="list-vertical" onSubmit={handleAddBook}>
         <input
           placeholder="Tytuł książki"
@@ -72,9 +96,10 @@ export default function NewBook() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-
         <button type="submit">Dodaj książkę</button>
       </form>
+
+      {successMessage && <p className="text-green-600">{successMessage}</p>}
     </main>
   );
 }
